@@ -1,6 +1,6 @@
 # Start using sast
 
-Use a normal checkout of [strikeboxlabs/sast](https://github.com/strikeboxlabs/sast) for authoring. Clone it onto the Linux image you control before executing the Linux scanner examples. GitHub access to this private repository is required to clone it.
+Use a normal checkout of [strikeboxlabs/sast](https://github.com/strikeboxlabs/sast) for authoring. Clone it onto the Linux image you control before executing the Linux scanner examples.
 
 ```bash
 git clone https://github.com/strikeboxlabs/sast.git
