@@ -1,0 +1,8 @@
+rules:
+  - id: python-shell-enabled
+    languages: [python]
+    severity: WARNING
+    message: Review shell-enabled subprocess execution and the command's provenance.
+    pattern-either:
+      - pattern: subprocess.run(..., shell=True, ...)
+      - pattern: subprocess.Popen(..., shell=True, ...)
