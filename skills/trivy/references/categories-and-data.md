@@ -32,7 +32,7 @@ For Helm/Terraform or other parameterized inputs, identify the actual values, va
 
 Secret matches are candidates, and this filesystem scan is not a full Git-history review. Check the matched file's purpose and whether the material is a documented dummy value, fixture, or plausible active credential. Keep real values out of summaries and new fixtures. Validation or rotation is a separate task with external effects; do not test the credential while explaining a local report.
 
-Existing secret configuration, allow rules and ignore settings can hide matches. Review their actual scope before declaring a category clean. An exception justified for one fixture should not broadly silence a credential type across production code.
+Existing secret configuration, allow rules and ignore settings can hide matches. Review their actual scope before declaring a category clean. Built-in allow rules also skip silently: paths matching `test`, `example`, `vendor/`, `/usr/(share|include|lib)/`, or `.md`, and any content containing 'example'. A fixture under such a path or using example credentials will not appear in output; move it to a neutral path with renamed values to verify secret scanning. An exception justified for one fixture should not broadly silence a credential type across production code.
 
 ## Data freshness and disconnected operation
 
