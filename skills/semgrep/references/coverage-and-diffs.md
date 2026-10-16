@@ -22,6 +22,8 @@ printf '%s\n' "$scan_status" >"$out/focused-status.txt"
 
 If parsing fails, isolate the syntax/extension or installed parser mismatch before interpreting rule absence. If a rule times out, a narrow rerun or a justified resource adjustment can recover evidence for that rule; it does not retroactively complete the original scan. Record which gap the rerun resolved and which remain. Avoid removing ignore rules globally to fix a single missing-file question.
 
+For source excerpts, prefer reported line/column locations. Semgrep offsets address source bytes: slice the original bytes before decoding. Indexing a decoded string with byte offsets can select the wrong text when earlier content contains non-ASCII characters. Check encoding and newline transformations before attributing a mismatch to scanner corruption.
+
 ## Count coverage with an explicit denominator
 
 For each run, report the selected rules/languages, distinct scanned paths, distinct paths with full syntax errors, distinct paths with partial parsing and paths affected by timeouts. Keep diagnostic-event counts separate from file counts: one path can have several errors or affected rules. Read both the JSON errors and stderr skip summary; ignored files, size limits and unsupported inputs can be absent from scanned paths.

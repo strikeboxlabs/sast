@@ -1,5 +1,13 @@
 # Initial source review
 
+## Semgrep negative-disposition and handoff review, 2026-10-16
+
+Reviewed the installed Semgrep package against supplied `proj_003` source-review artifacts. The scanner had reported a location later dismissed on the basis of a post-action check; subsequent workers inherited the negative label without the required construction evidence. The final grouped triage omitted that location while claiming complete review. A separate excerpt error came from indexing decoded source text with byte offsets. These are review/evidence failures, not evidence of scanner corruption or a need for additional detection rules.
+
+Updated the entrypoint, coverage reference and a new skill-local triage reference under schema v0.1. Rejected matches require actual input provenance, control/effect ordering and effective construction evidence. Grouped reviews use a local reconciliation helper that binds retained reports and source/evidence digests to explicit per-match dispositions, preserves unresolved questions and rejects missing or stale decisions. The helper checks accounting and freshness, not whether a reviewer correctly understood source. No new scanner rules, exploit procedures or target execution were added. Other tool skills and discovery tags remain unchanged.
+
+A separate reviewer used the revised skill on a harmless supplied-source case with a prior negative note. It reopened the candidate as unresolved, identified late validation and missing effective-settings evidence, and distinguished source-control weaknesses from unverified deployment impact. This single behavioral check supports the intended decision change; it is not a detection-rate benchmark or a guarantee about later models. A retained-report smoke check accounted for all 129 raw matches and 14 diagnostics without changing the historical assessment. See [validation](validation.md).
+
 ## Semgrep worker-evidence revision, 2026-10-16
 
 Reviewed the Semgrep entrypoint and both conditional references under SAST schema v0.1 after inspecting supplied Board run `proj_002`. Revisions clarify required reference timing, fixture checks before broad custom-rule scans, documented left anchoring of `metavariable-regex`, statement matching diagnostics, distinct file/error counts, explicit coverage denominators and final candidate reconciliation. Findings must distinguish scanner severity from application impact; an empty secrets result does not establish absence of credentials. No new detection rules, scanner scope, tool installation or Board configuration was added. Other six skill packages were left unchanged.

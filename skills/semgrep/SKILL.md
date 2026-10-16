@@ -14,6 +14,7 @@ Read a selected reference completely before its procedure:
 | Initial scan and ordinary finding review | Guidance below; no additional local resource required. |
 | Unexpectedly empty results, ignored files, timeouts, or changed-code comparisons | [references/coverage-and-diffs.md](references/coverage-and-diffs.md) |
 | New pattern/taint rule or a rule regression | [references/rule-development.md](references/rule-development.md); the supplied starter uses [assets/rules/python-shell-enabled.yaml](assets/rules/python-shell-enabled.yaml) and its paired [test input](assets/rules/python-shell-enabled.py). |
+| Rejecting a match based on a protection, grouped triage, or a worker handoff | [references/triage-reconciliation.md](references/triage-reconciliation.md); includes the local match/disposition checker. |
 
 Read the rule-development reference **before writing or changing custom rules**, and the coverage reference when reports contain parse errors or timeouts. Keep the references relevant to the task; a routine scan does not require custom rule authoring.
 
@@ -47,7 +48,7 @@ printf '%s\n' "$scan_status" >"$out/status.txt"
 printf 'Reports: %s\n' "$out"
 ```
 
-With `--error`, status 1 can mean findings; without it, findings normally still return 0. Other failures, and errors recorded alongside findings, need inspection. Read JSON `results`, `errors`, and available path/scan summaries together with stderr. Parse failures and timeouts can leave partial findings even when a report exists. Quantify that bound instead of listing it: count `errors` of type `PartialParsing` per language and name the affected production files, then report a thin or empty result for a language as "no matches among files that parsed, N files failed to parse". A parser lagging newer language syntax (observed: Semgrep 1.181.0 partially failing recent-syntax C# files) is a coverage limit to record with the version, not a finding and not whole-language cleanliness. The scan does not modify source; autofix is a separate operation.
+With `--error`, status 1 can mean findings; without it, findings normally still return 0. Other failures, and errors recorded alongside findings, need inspection. Read JSON `results`, `errors`, and available path/scan summaries together with stderr. Parse failures and timeouts can leave partial findings even when a report exists. Count distinct affected paths per language, distinguishing partial parsing from full syntax failures; name the relevant production files and unresolved regions. A parsed-line percentage is not a fully parsed file count. An empty result remains limited to the actual rules and parsed regions. The scan does not modify source; autofix is a separate operation.
 
 Preserve each run's report, status and diagnostics separately. Reuse a completed report when its source and configuration still fit the question. Test a rule correction on its fixture or affected file before repeating a full scan; a later worker need not repeat unchanged scans.
 
@@ -55,11 +56,15 @@ Preserve each run's report, status and diagnostics separately. Reuse a completed
 
 For a reported rule ID and location, inspect the matched expression in its enclosing function and the relevant callers. Establish which input is controllable, how it reaches the operation, what validation or safe API is already present, and whether the code path is used. A rule named for injection is still a hypothesis until its assumptions hold in this source.
 
+Before rejecting a match as protected, verify the control's actual enforcement point and runtime wiring. A check after an external action can reject its result without preventing that action; truncating a value after reading it does not bound the read. Follow relevant constructors, registrations and callers rather than inferring effective settings from a helper's intent. Input may originate in stored or synchronized external data, not only the current HTTP request. Unverified protection or trust assumptions remain unresolved.
+
 When a trace is available, verify each meaningful handoff in source. A missing trace is not evidence that no data path exists. Separate a confirmed unsafe condition, a plausible finding needing context, and a false match with a concrete reason. If a fix is requested, prefer a safe API or a checked invariant, then rerun the same rule/configuration and relevant application checks.
 
 ## Finish with current, bounded conclusions
 
 Report tool/engine, source scope/revision, rules, errors/exclusions and raw output paths. Count raw matches separately from confirmed defects, unresolved candidates and rejected matches. Reconcile earlier candidate records with the final disposition; rejected or superseded candidates must not remain in the current vulnerability count. If the reporting system retains immutable history, explicitly identify the superseded records in the final summary.
+
+For grouped triage or a multi-worker handoff, keep one disposition per unique raw match and run the [reconciliation procedure](references/triage-reconciliation.md) before claiming all matches reviewed. Reuse evidence-backed dispositions, not a prior worker's label alone. A new scan match without a matching disposition remains unresolved even if an earlier summary called the area hardened. Reconciliation checks accounting and evidence freshness; it does not prove the judgment correct.
 
 For each supported defect, explain the source location, relevant input/control boundary, existing protections, realistic consequence and remaining uncertainty. Keep scanner severity separate from assessed application impact. A request for several serious vulnerabilities does not establish that any exist; report none confirmed when that is the supported result.
 

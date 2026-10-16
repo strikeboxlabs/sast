@@ -1,5 +1,11 @@
 # Validation record
 
+## Semgrep disposition reconciliation, 2026-10-16
+
+The revised installed package adds source-ordering/construction guidance, byte-offset interpretation and a standard-library-only reconciliation helper. The helper performs no scanner run, source execution or network operation. Sixteen new tests cover complete accounting, duplicate/missing/unknown entries, report and source/evidence freshness, path containment, malformed fields and retained unresolved questions. All 49 repository tests pass. The repository checker, Bash syntax parsing and skill-creator validation pass; complete counts are available from the checker output.
+
+Initialization and validation of a ledger for the retained `proj_003` report account for 129 unique matches and 14 scan diagnostics, all initially unresolved. This is a reporting-helper smoke check, not a new target scan and not a change to historical findings. An independent source-only review of a harmless three-file case reopened a prior unsupported negative disposition and successfully validated one unresolved match with evidence. Target code was not executed and no exploit or network probe was performed. The requested fresh assessment remains the effectiveness comparison; model judgment is not guaranteed by a valid ledger.
+
 ## Semgrep worker-evidence revision, 2026-10-16
 
 Revised only the Semgrep package and its catalogue/maintenance prose in a writable copy of the installed repository. Existing scanner examples and the bundled rule are unchanged. Added no target-specific detection rules, live requests, application execution or Board runtime changes. The source-evidence review and documented regex semantics are recorded in [source review](source-review.md).

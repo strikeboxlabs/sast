@@ -10,7 +10,7 @@ These skills target the Linux image you control. They document tool use; they do
 
 | Skill | Use it for | Useful distinction |
 |---|---|---|
-| [semgrep](skills/semgrep/SKILL.md) | Source scanning, report triage and tested project-specific rules | Build-free source checks; test custom matching first, account for parser coverage and reconcile candidates across handoffs. |
+| [semgrep](skills/semgrep/SKILL.md) | Source scanning, report triage and tested project-specific rules | Verify protective controls before rejecting matches; reconcile each match and preserve evidence freshness across handoffs. |
 | [codeql](skills/codeql/SKILL.md) | Database-backed analysis and paths through supported languages, including C# | Sound extraction, matching query packs and applicable licensing; preserve SDK and database provenance. |
 | [bandit](skills/bandit/SKILL.md) | Python security checks | AST checks with separate severity and confidence; not a whole-program dataflow proof. |
 | [gosec](skills/gosec/SKILL.md) | Go package security checks | Package loading, build tags, dependencies, and processing errors determine coverage. |
