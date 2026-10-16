@@ -1,5 +1,11 @@
 # Initial source review
 
+## Semgrep worker-evidence revision, 2026-10-16
+
+Reviewed the Semgrep entrypoint and both conditional references under SAST schema v0.1 after inspecting supplied Board run `proj_002`. Revisions clarify required reference timing, fixture checks before broad custom-rule scans, documented left anchoring of `metavariable-regex`, statement matching diagnostics, distinct file/error counts, explicit coverage denominators and final candidate reconciliation. Findings must distinguish scanner severity from application impact; an empty secrets result does not establish absence of credentials. No new detection rules, scanner scope, tool installation or Board configuration was added. Other six skill packages were left unchanged.
+
+Primary semantics: [rule operators](https://docs.semgrep.dev/writing-rules/rule-syntax#metavariable-regex) and the existing [annotated test procedure](https://docs.semgrep.dev/writing-rules/testing-rules). A harmless C# property-assignment fixture on installed Semgrep 1.181.0 confirmed that prefix-only regex and substring regex have different expected matches; it did not exercise application vulnerabilities. Historic worker claims of a regex engine defect were not accepted as a portable restriction. See the separate validation record for checks of this revision. No measured worker improvement is claimed before the requested assessment rerun.
+
 Review date: 2026-10-15. Schema: SAST v0.1, adapted from research-library v0.8. This review uses official documentation/upstream code for command semantics; it is not a scanner benchmark or an executed security assessment.
 
 All seven accepted packages were reviewed as complete entrypoints and selected conditional tasks, including discovery within the first 150 lines. All entrypoints are shorter than that boundary. No accepted package is left unreviewed in this initial scope. The research-library's other tool packages were not migrated or claimed as reviewed.

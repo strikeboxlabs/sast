@@ -22,6 +22,14 @@ printf '%s\n' "$scan_status" >"$out/focused-status.txt"
 
 If parsing fails, isolate the syntax/extension or installed parser mismatch before interpreting rule absence. If a rule times out, a narrow rerun or a justified resource adjustment can recover evidence for that rule; it does not retroactively complete the original scan. Record which gap the rerun resolved and which remain. Avoid removing ignore rules globally to fix a single missing-file question.
 
+## Count coverage with an explicit denominator
+
+For each run, report the selected rules/languages, distinct scanned paths, distinct paths with full syntax errors, distinct paths with partial parsing and paths affected by timeouts. Keep diagnostic-event counts separate from file counts: one path can have several errors or affected rules. Read both the JSON errors and stderr skip summary; ignored files, size limits and unsupported inputs can be absent from scanned paths.
+
+When reporting a percentage, name the denominator and use the same run's data. For example, 100 distinct error-affected files among 2,500 scanned files is 4%. Do not divide C# errors by a separate mixed-language run's file count or equate a parsed-line percentage with fully parsed files. Partial parsing does not mean the whole file was skipped; report affected regions when available. If the report does not expose the necessary paths, retain counts without inventing a file-coverage percentage.
+
+Prioritize manual review or a focused diagnostic for relevant error-affected files. Distinguish code inspected manually from code successfully analyzed by Semgrep. A grep for API names can help locate a gap, but does not restore parser/dataflow coverage or prove absence of a vulnerability class. Keep unresolved gaps in the final conclusion even when the scanner exits successfully.
+
 ## Compare against a baseline
 
 Use a real locally available Git commit, such as the relevant merge base, with the intended rules and engine held constant. Confirm its meaning with the user/task context. Diff scanning answers which findings are new relative to that baseline; it does not attest to the rest of the repository.

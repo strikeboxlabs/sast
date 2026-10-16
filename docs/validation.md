@@ -1,5 +1,13 @@
 # Validation record
 
+## Semgrep worker-evidence revision, 2026-10-16
+
+Revised only the Semgrep package and its catalogue/maintenance prose in a writable copy of the installed repository. Existing scanner examples and the bundled rule are unchanged. Added no target-specific detection rules, live requests, application execution or Board runtime changes. The source-evidence review and documented regex semantics are recorded in [source review](source-review.md).
+
+All 33 repository tests passed without skips, including isolated package copies and evidence-directory behavior. The repository checker accepted 7 skills, 26 Markdown files, 58 local links and 26 Bash blocks parsed for syntax only. Skill-creator frontmatter validation and `git diff --check` passed.
+
+On installed Semgrep 1.181.0, the native `scan --test` runner could not start its Python multiprocessing forkserver because the sandbox refused socket binding. This was not a rule-test failure or a successful annotated run. A local scan of the unchanged static Python fixture completed with no errors; explicit assertions against every annotated rule ID/source location verified 2 expected matches and 2 expected nonmatches, with no unexpected or missed matches. The fixture was not imported or executed. A prior harmless C# property-assignment scan verified prefix/substring matching semantics. Neither check establishes vulnerability-detection rates or improved worker compliance; the user-requested assessment rerun remains the behavioral evaluation.
+
 ## Scanner efficiency run, 2026-10-16
 
 Host-run timing comparison against the supplied `TigerOps-develop` checkout (2,348 C# files under `src/`, ~737k lines) — the same source the Board `proj_001` run reviewed. Scanners already installed: Semgrep 1.181.0, Trivy 0.76.0, CodeQL bundle 2.27.2. Outputs kept in a scratch directory; the source tree was read-only; no fixture execution or external secret validation.
