@@ -1,5 +1,22 @@
 # Validation record
 
+## Scanner efficiency run, 2026-10-16
+
+Host-run timing comparison against the supplied `TigerOps-develop` checkout (2,348 C# files under `src/`, ~737k lines) — the same source the Board `proj_001` run reviewed. Scanners already installed: Semgrep 1.181.0, Trivy 0.76.0, CodeQL bundle 2.27.2. Outputs kept in a scratch directory; the source tree was read-only; no fixture execution or external secret validation.
+
+- Trivy `fs --scanners vuln,secret,misconfig` (warm vulnerability database): 14.7 s wall, rc=0. Five distinct advisories from built `deps.json` resolved inputs — three HIGH on System.Security.Cryptography.Xml 9.0.18 (CVE-2026-96958/-96959/-96960) and HIGH CVE-2026-84008 plus MEDIUM CVE-2026-70162 on System.Security.Cryptography.Pkcs 9.0.18 — plus two Dockerfile misconfigurations (DS-0002 root user, HIGH; DS-0026 missing HEALTHCHECK, LOW) and no secrets. Findings repeat across ten `deps.json` targets; five advisory identities consolidate to one remediation.
+- Semgrep `--config p/default` (registry fetch over the network): 67 s wall, rc=0, 9 findings — 5 GitHub Actions mutable-action tags, Dockerfile missing-user (agrees with Trivy DS-0002), a Python dynamic-urllib audit in `scripts/deployment/static_smoke.py` (dev tooling), one C# unsafe-path-combine (`src/TigerOps.Infrastructure/Services/Hanne/HanneKnowledgeLoader.cs:19`), one JS unsafe-formatstring. 13 parse errors, including partial parsing of three production C# files (`SqlProbe.cs`, `KaseyaDeviceLinkClient.cs`, `SentinelWebhookController.cs`) — a C# coverage gap to record per the entrypoint, not silently accept.
+- CodeQL `database create --language=csharp`: failed in 2.9 s under the system dotnet 6.0.400 (NETSDK1045; SDK cannot target net9.0), then succeeded in 276.4 s with `DOTNET_ROOT` pointed at the prior run's recorded 9.0.319 toolchain under the project evidence directory. This reproduces the extraction reference's toolchain-continuity guidance end to end: check prior evidence for a prepared SDK before concluding extraction is impossible. A follow-up `database analyze` with `csharp-security-extended` (CSV) took a further 581.9 s and returned 37 alerts — dominated by 10 cookie-`Secure` notices, user-input log-insertion, sensitive-data-in-logs and one untrusted-URL-redirection — audit-class results requiring triage rather than the dependency/advisory answer Trivy supplied directly.
+- Baseline for comparison: the manual Board investigation of the same dependency question (intents i007+i008) cost 2,217 s wall, 79 model calls, and ~3.19M tokens, and additionally produced a decompilation diff, a 24-probe behavioral matrix, and a verified patch — capability the scanners do not replace.
+
+## Supplied worker-run review, 2026-10-16
+
+Prepared changes to three packages from the installed repository in a writable review copy. The environment rejected modification of `/opt/sast`; installed packages and frozen historical attempts remain unchanged. Changes add no scanner commands or executable helpers. Their behavior is limited to discovery descriptions and source-review/reporting guidance.
+
+Current read-only version checks succeeded for Semgrep 1.181.0, CodeQL 2.27.2 and Trivy 0.76.0. CodeQL language resolution included C#. No scanner analysis, rule fetch, target application, live endpoint or reproduction harness ran. Supplied historical evidence was inspected without rerunning it. No independent model evaluation or performance improvement is claimed.
+
+Validation of the review copy passed: all 33 repository tests with no skips; the repository checker accepted 7 packages, 26 Markdown files, 57 local links and 26 Bash blocks parsed for syntax only; skill-creator frontmatter validation passed for CodeQL, Semgrep and Trivy; `git diff --check` passed. Existing isolated-package and evidence-directory tests passed. These checks establish packaging and preserved command syntax, not a measured improvement in worker choices or findings.
+
 ## Bootstrap on 2026-10-15
 
 Authoring host: Windows; Python 3.12. WSL reports that it is not installed, Docker is unavailable on PATH, and the selected scanners are not available on PATH. Scanner binaries were not installed. The controlled Linux image and its executable paths remain unverified.

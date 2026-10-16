@@ -10,13 +10,13 @@ These skills target the Linux image you control. They document tool use; they do
 
 | Skill | Use it for | Useful distinction |
 |---|---|---|
-| [semgrep](skills/semgrep/SKILL.md) | Broad source scanning and project-specific pattern or taint rules | Fast starting point without building the application; record the engine and rule coverage. |
-| [codeql](skills/codeql/SKILL.md) | Database-backed analysis and paths through supported languages | Deeper queries require sound extraction, matching query packs, and applicable licensing. |
+| [semgrep](skills/semgrep/SKILL.md) | Broad source scanning and project-specific pattern or taint rules | Build-free source checks; preserve rule coverage and reviewed dispositions across handoffs. |
+| [codeql](skills/codeql/SKILL.md) | Database-backed analysis and paths through supported languages, including C# | Sound extraction, matching query packs and applicable licensing; preserve SDK and database provenance. |
 | [bandit](skills/bandit/SKILL.md) | Python security checks | AST checks with separate severity and confidence; not a whole-program dataflow proof. |
 | [gosec](skills/gosec/SKILL.md) | Go package security checks | Package loading, build tags, dependencies, and processing errors determine coverage. |
 | [brakeman](skills/brakeman/SKILL.md) | Ruby on Rails security checks | Rails-specific interpretation of controllers, models, views, and request data. |
 | [cppcheck](skills/cppcheck/SKILL.md) | C/C++ defects such as lifetime, bounds, and uninitialized-value problems | Prefer real compilation settings; distinguish suspected defects from modeling gaps. |
-| [trivy](skills/trivy/SKILL.md) | Repository dependencies, IaC misconfigurations, and exposed secrets | Complementary SCA/configuration/secret scanning; does not replace application source analysis. |
+| [trivy](skills/trivy/SKILL.md) | Repository dependencies, IaC misconfigurations, and exposed secrets | Separate advisory severity from application impact; consolidate repeated package/advisory observations. |
 
 For a mixed repository, start with Semgrep and add the relevant language specialist. Choose CodeQL when its supported language and extraction model match the question. Use Trivy alongside source analysis for manifests and deployment files. Running every tool is not a completion criterion, and agreement between scanners does not establish reachability.
 

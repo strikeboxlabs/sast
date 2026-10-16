@@ -1,6 +1,6 @@
 ---
 name: trivy
-description: Scan local repository dependencies, infrastructure configuration, and candidate secrets with Trivy; review database freshness, enabled scanners, and category-specific findings.
+description: Review repository dependency advisories, infrastructure configuration and candidate secrets with Trivy; distinguish package severity, application reachability and verified remediation.
 ---
 
 # Trivy repository security checks
@@ -37,6 +37,8 @@ Inspect JSON `Results` and the relevant `Vulnerabilities`, `Misconfigurations`, 
 `--exit-code 1` makes matching issues produce a nonzero status; processing/data failures can also fail. Without that option, findings do not necessarily fail the command. A category absent from output may have no findings, no recognized input, an exclusion, or no enabled scanner. Establish which before describing coverage.
 
 For dependencies, inspect manifest/lockfile, package identity, installed/fixed version and advisory applicability. For configuration, inspect the real deployment inputs and whether the check's assumption applies. For a candidate secret, distinguish test material from a plausible credential without reproducing the value. Escalate the evidence to the requested remediation/review workflow; suppressing the result does not repair the source.
+
+Keep advisory severity separate from application impact and consolidate repeated observations of the same package/advisory. For resolved-input requirements, finding identity and before/after evidence, use the dependency section of the required category reference. A build-system audit warning is useful evidence, but does not establish that Trivy recognized or analyzed that dependency set.
 
 Report the source scope, version/database/check state, scanners, filters/exclusions, raw output/status paths, and category-specific decisions with remaining gaps. A repository scan does not attest to an image, running workload, Git history, or application dataflow unless those distinct targets were actually analyzed.
 

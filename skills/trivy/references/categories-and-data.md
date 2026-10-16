@@ -8,7 +8,17 @@ Use a supported manifest/lockfile for the actual package set. A manifest without
 
 Inspect direct/transitive ownership and the controlling lockfile before proposing an update. A dependency advisory does not prove reachable application behavior; a reachability conclusion needs separate source evidence. `--ignore-unfixed` or severity filtering changes what is displayed, not whether the dependency is present. Preserve the initial scope and any policy exceptions when comparing after a fix.
 
+Keep advisory severity separate from application impact. A high-severity advisory can warrant an update while application reachability is absent or unresolved. Report those states explicitly; reproducing affected behavior in an isolated library does not establish an application input path. Negative reachability evidence is bounded by the reviewed source snapshot and deployment assumptions, not a claim that the dependency is safe in every deployment.
+
+Consolidate repeated observations by package, resolved version, advisory ID and affected application scope. Update the existing finding as evidence changes instead of counting build warnings, scanner alerts and later review as separate vulnerabilities. Multiple advisories can share one remediation item while retaining their individual identifiers. Preserve prior evidence paths and distinguish superseded statements from current conclusions.
+
+For .NET supplied-source reviews, check project references separately from the resolved graph. A direct package reference can also have transitive consumers; those consumers do not make the application's own pin transitive. Identify the actual resolved input recognized by this Trivy version and confirm it appears in the report. If only project declarations or another tool's audit warnings are available, state that limitation instead of claiming Trivy dependency coverage.
+
+A filesystem scan of a built repository encounters several resolved inputs for the same application: per-project `deps.json`/lockfile artifacts plus copies inside test output directories. Confirm those artifacts agree before counting them separately; consolidate by package and resolved version, and record which artifact produced the report. A stale build output can describe an older project state than the current manifest, so prefer the freshest canonical application artifact and treat disagreements between artifacts as evidence to reconcile, not as additional vulnerabilities. Repository build outputs still do not establish what a deployment actually installs.
+
 After an authorized dependency change, rescan the updated resolved inputs with recorded data. Do not infer a container's final installed package set solely from a repository lockfile.
+
+Compare baseline and updated source snapshots using the same scanner scope, filters and recorded data context. Distinguish a proposed version change, a successfully resolved update, a completed build and a completed audit; none implies the others. For handoff, retain those report/status paths, the toolchain location and unresolved coverage. Existing negative reachability evidence plus a verified dependency update can support a remediation conclusion without requiring a new library-behavior reproduction.
 
 ## IaC and deployment context
 
