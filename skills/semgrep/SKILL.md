@@ -21,9 +21,13 @@ Semgrep is useful for broad source review without compiling the application. Mat
 
 Run from the source repository root after selecting the intended checkout. `p/default` is a registry ruleset fetched over the network; use an approved local rule file/directory for a controlled rule snapshot. Record its identity and, for local rules, a digest. `--metrics=off` disables metrics; it does not make registry retrieval offline.
 
+When Board supplies `BOARD_EVIDENCE_DIR`, keep reports in a fresh subdirectory there. Standalone use falls back to `TMPDIR` or `/tmp`. Stop if the output directory cannot be created; do not silently redirect evidence elsewhere.
+
 ```bash
 repo=$(pwd -P)
-out=$(mktemp -d "${TMPDIR:-/tmp}/semgrep.XXXXXX")
+output_root=${BOARD_EVIDENCE_DIR:-${TMPDIR:-/tmp}}
+mkdir -p -- "$output_root" || exit 1
+out=$(mktemp -d "$output_root/semgrep.XXXXXX") || exit 1
 semgrep --version >"$out/version.txt" 2>&1
 if semgrep scan --config p/default --metrics=off --disable-version-check \
   --error --json-output "$out/findings.json" \

@@ -26,3 +26,7 @@ The catalogue selects complementary source-analysis tasks across languages and i
 - Actual scans, scanner rule execution, and worker outcome studies: tracked separately in [validation](validation.md). Documentation review is not runtime evidence.
 
 Upstream pages track their current branches/releases. Repeat consequential verification when installed behavior differs. The full scaffold-reuse record is in [reuse](reuse.md); raw authoring captures belong in ignored work/runs rather than in tool packages.
+
+## Catalogue and output-path review, 2026-10-16
+
+All seven complete entrypoints were reviewed for schema-v0.1 activation, task/resource routes, output preservation and the new Board evidence-directory precedence. The scanner commands, report interpretations and conditional references retain the previously reviewed source scope. Added catalogue tags describe their existing supported tasks; Trivy remains complementary configuration/dependency/secret analysis. No new scanner semantics, installed paths or executable readiness were inferred. See [catalogue documentation](catalog.md) and the dated [validation record](validation.md).

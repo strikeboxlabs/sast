@@ -13,9 +13,13 @@ Use Brakeman for Rails-aware source analysis across application components. It d
 
 Prefer the available installed executable. If the project requires its already provisioned bundled version, use `bundle exec brakeman` instead; do not install a bundle merely to scan source. Keep the detected Rails version and existing configuration/ignore files in the report context.
 
+When Board supplies `BOARD_EVIDENCE_DIR`, keep reports in a fresh subdirectory there. Standalone use falls back to `TMPDIR` or `/tmp`. Stop if the output directory cannot be created; do not silently redirect evidence elsewhere.
+
 ```bash
 app=$(pwd -P)
-out=$(mktemp -d "${TMPDIR:-/tmp}/brakeman.XXXXXX")
+output_root=${BOARD_EVIDENCE_DIR:-${TMPDIR:-/tmp}}
+mkdir -p -- "$output_root" || exit 1
+out=$(mktemp -d "$output_root/brakeman.XXXXXX") || exit 1
 brakeman --version >"$out/version.txt" 2>&1
 if brakeman --path "$app" --format json --output "$out/findings.json" \
   --no-pager >"$out/stdout.log" 2>"$out/stderr.log"; then

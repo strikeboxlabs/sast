@@ -1,5 +1,7 @@
 # Start using sast
 
+For selective Board/Pi loading, use the optional [skill catalogue](docs/catalog.md). Packages remain independently installable; category views do not require moving folders.
+
 Use a normal checkout of [strikeboxlabs/sast](https://github.com/strikeboxlabs/sast) for authoring. Clone it onto the Linux image you control before executing the Linux scanner examples.
 
 ```bash

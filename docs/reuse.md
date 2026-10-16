@@ -2,9 +2,9 @@
 
 Reviewed on 2026-10-15 against local research-library commit `4f2c188fcc1477fa230ce447ef1b6243daa0cd40` (`updates`). The source checkout was clean when inspected. Reuse was requested by the repository owner; this new repository has no runtime dependency on the original checkout.
 
-## Unmodified copies
+## Bootstrap copies
 
-These files retain the source bytes, verified by SHA-256 during bootstrap:
+These source identities were verified by SHA-256 during bootstrap. Later adaptations are recorded below:
 
 | File | SHA-256 |
 |---|---|
@@ -22,3 +22,8 @@ The checker covers Markdown links/fences, basic skill metadata, authoring placeh
 [GETTING_STARTED.md](../GETTING_STARTED.md), [AGENTS.md](../AGENTS.md), [the schema](../authoring/schema.md), and [creation prompt](../authoring/create-skill.prompt.md) adapt the source repository's independent packaging, progressive disclosure, activation contract, source-to-task review, and evidence distinctions to static analysis. The new schema is SAST v0.1, derived from tool schema v0.8.
 
 The catalogue, source records, evaluation cases, seven tool packages, and small Semgrep rule/test pair were written for this repository. No research-library tool package was copied. No assessment methodologies, source PDFs, historical intake queues, machine profile settings, credentials, scan reports, or scanner binaries were imported. The new repository does not inherit the original Git history or remote.
+
+
+## Catalogue helper adaptation, 2026-10-16
+
+`scripts/check_repository.py` and `tests/test_check_repository.py` now include optional catalogue validation and its integration test; their bootstrap hashes above are historical source identities, not claims of current byte equality. `scripts/check_catalog.py` and `tests/test_check_catalog.py` are new standard-library helpers copied independently from the same authoring change in research-library. No runtime package depends on those authoring scripts or the other repository. The remaining bootstrap copies are unchanged by this catalogue task. SAST's directory-only fixture test is specific to its seven report-output examples.

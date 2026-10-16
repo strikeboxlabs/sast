@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "library_id": "sast",
+  "skills": [
+    {
+      "id": "bandit",
+      "path": "skills/bandit",
+      "tags": [
+        "artifact:scan-report",
+        "artifact:source",
+        "execution:linux",
+        "language:python",
+        "task:finding-triage",
+        "task:source-review",
+        "task:static-analysis"
+      ],
+      "requires": []
+    },
+    {
+      "id": "brakeman",
+      "path": "skills/brakeman",
+      "tags": [
+        "artifact:scan-report",
+        "artifact:source",
+        "execution:linux",
+        "language:ruby",
+        "target:rails",
+        "task:finding-triage",
+        "task:source-review",
+        "task:static-analysis"
+      ],
+      "requires": []
+    },
+    {
+      "id": "codeql",
+      "path": "skills/codeql",
+      "tags": [
+        "artifact:scan-report",
+        "artifact:source",
+        "execution:linux",
+        "task:finding-triage",
+        "task:source-review",
+        "task:static-analysis"
+      ],
+      "requires": []
+    },
+    {
+      "id": "cppcheck",
+      "path": "skills/cppcheck",
+      "tags": [
+        "artifact:scan-report",
+        "artifact:source",
+        "execution:linux",
+        "language:c",
+        "language:cpp",
+        "task:finding-triage",
+        "task:source-review",
+        "task:static-analysis"
+      ],
+      "requires": []
+    },
+    {
+      "id": "gosec",
+      "path": "skills/gosec",
+      "tags": [
+        "artifact:scan-report",
+        "artifact:source",
+        "execution:linux",
+        "language:go",
+        "task:finding-triage",
+        "task:source-review",
+        "task:static-analysis"
+      ],
+      "requires": []
+    },
+    {
+      "id": "semgrep",
+      "path": "skills/semgrep",
+      "tags": [
+        "artifact:scan-report",
+        "artifact:source",
+        "execution:linux",
+        "task:finding-triage",
+        "task:source-review",
+        "task:static-analysis"
+      ],
+      "requires": []
+    },
+    {
+      "id": "trivy",
+      "path": "skills/trivy",
+      "tags": [
+        "artifact:config",
+        "artifact:scan-report",
+        "execution:linux",
+        "task:config-diagnostics",
+        "task:finding-triage",
+        "task:static-analysis"
+      ],
+      "requires": []
+    }
+  ]
+}

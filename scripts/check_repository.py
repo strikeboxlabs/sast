@@ -2,6 +2,7 @@
 """Check this repository's Markdown links and portable skill packaging (Python 3.10+)."""
 
 import argparse
+import importlib.util
 import json
 from pathlib import Path
 import re
@@ -11,6 +12,10 @@ from urllib.parse import unquote
 
 
 IGNORED = {".git", "work", "runs", "__pycache__", ".venv", "node_modules"}
+
+CATALOG_SPEC = importlib.util.spec_from_file_location("skill_catalog_checker", Path(__file__).with_name("check_catalog.py"))
+CATALOG_CHECKER = importlib.util.module_from_spec(CATALOG_SPEC)
+CATALOG_SPEC.loader.exec_module(CATALOG_CHECKER)
 
 
 def markdown_parts(text):
@@ -118,6 +123,8 @@ def check_repository(root, bash=None):
             parsed += 1
             if result.returncode:
                 errors.append(f"Bash syntax in {label}: {result.stderr.strip()}")
+    catalog = CATALOG_CHECKER.check_catalog(root)
+    errors.extend(catalog["errors"])
     return {
         "markdown_files": markdown_files,
         "local_links_checked": links,
@@ -126,6 +133,9 @@ def check_repository(root, bash=None):
         "bash_blocks_parsed": parsed,
         "bash_status": "parsed only; commands not executed" if bash else "skipped; Bash unavailable or not selected",
         "frontmatter_scope": "basic one-line name/description checks for this MVP, not a full YAML/spec validator",
+        "catalog_present": catalog["catalog_present"],
+        "catalog_entries": catalog["catalog_entries"],
+        "catalog_unreviewed": catalog["catalog_unreviewed"],
         "errors": errors,
     }
 

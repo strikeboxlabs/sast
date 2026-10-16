@@ -13,9 +13,13 @@ Use Cppcheck for static defect review without running the target program. Real b
 
 Run from the intended source root. This starting scan enables selected additional diagnostic groups while retaining default error checks. Prefer the build-context workflow when the project supplies `compile_commands.json`.
 
+When Board supplies `BOARD_EVIDENCE_DIR`, keep reports in a fresh subdirectory there. Standalone use falls back to `TMPDIR` or `/tmp`. Stop if the output directory cannot be created; do not silently redirect evidence elsewhere.
+
 ```bash
 repo=$(pwd -P)
-out=$(mktemp -d "${TMPDIR:-/tmp}/cppcheck.XXXXXX")
+output_root=${BOARD_EVIDENCE_DIR:-${TMPDIR:-/tmp}}
+mkdir -p -- "$output_root" || exit 1
+out=$(mktemp -d "$output_root/cppcheck.XXXXXX") || exit 1
 cppcheck --version >"$out/version.txt" 2>&1
 if cppcheck --enable=warning,performance,portability \
   --xml --xml-version=2 --error-exitcode=1 "$repo" \

@@ -13,9 +13,13 @@ Trivy complements application SAST with dependency vulnerabilities, IaC misconfi
 
 This example explicitly enables all three categories; filesystem defaults do not imply misconfiguration scanning. It may retrieve vulnerability databases, checks, and dependency metadata. Record the data/version context, and use the reference when network access is unavailable or constrained. Existing `trivy.yaml`, ignore files, and environment settings can affect output.
 
+When Board supplies `BOARD_EVIDENCE_DIR`, keep reports in a fresh subdirectory there. Standalone use falls back to `TMPDIR` or `/tmp`. Stop if the output directory cannot be created; do not silently redirect evidence elsewhere.
+
 ```bash
 repo=$(pwd -P)
-out=$(mktemp -d "${TMPDIR:-/tmp}/trivy.XXXXXX")
+output_root=${BOARD_EVIDENCE_DIR:-${TMPDIR:-/tmp}}
+mkdir -p -- "$output_root" || exit 1
+out=$(mktemp -d "$output_root/trivy.XXXXXX") || exit 1
 trivy --version >"$out/version.txt" 2>&1
 if trivy fs --scanners vuln,misconfig,secret --format json \
   --output "$out/findings.json" --exit-code 1 "$repo" \

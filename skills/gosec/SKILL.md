@@ -13,9 +13,13 @@ gosec analyzes Go source using its package/type context. Use it for Go-specific 
 
 Run this from the intended module root. Loading packages can need cached or retrievable dependencies; record a missing dependency instead of silently fetching/changing project dependencies. `./...` does not promise coverage of every nested module in a monorepo.
 
+When Board supplies `BOARD_EVIDENCE_DIR`, keep reports in a fresh subdirectory there. Standalone use falls back to `TMPDIR` or `/tmp`. Stop if the output directory cannot be created; do not silently redirect evidence elsewhere.
+
 ```bash
 repo=$(pwd -P)
-out=$(mktemp -d "${TMPDIR:-/tmp}/gosec.XXXXXX")
+output_root=${BOARD_EVIDENCE_DIR:-${TMPDIR:-/tmp}}
+mkdir -p -- "$output_root" || exit 1
+out=$(mktemp -d "$output_root/gosec.XXXXXX") || exit 1
 gosec -version >"$out/version.txt" 2>&1
 go version >"$out/go-version.txt" 2>&1
 cd "$repo"

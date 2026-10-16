@@ -21,9 +21,13 @@ CodeQL analyzes a database extracted from source. A successful query over the wr
 
 This example is for a Python checkout and a locally available Python security-extended suite. Confirm support with `codeql resolve languages`. Replace both language and suite coherently for another supported language; use the extraction reference first when builds are involved.
 
+When Board supplies `BOARD_EVIDENCE_DIR`, keep reports in a fresh subdirectory there. Standalone use falls back to `TMPDIR` or `/tmp`. Stop if the output directory cannot be created; do not silently redirect evidence elsewhere.
+
 ```bash
 repo=$(pwd -P)
-out=$(mktemp -d "${TMPDIR:-/tmp}/codeql.XXXXXX")
+output_root=${BOARD_EVIDENCE_DIR:-${TMPDIR:-/tmp}}
+mkdir -p -- "$output_root" || exit 1
+out=$(mktemp -d "$output_root/codeql.XXXXXX") || exit 1
 codeql version >"$out/version.txt" 2>&1
 if codeql database create "$out/db-python" --language=python \
   --source-root="$repo" >"$out/extraction.log" 2>"$out/extraction-errors.log"; then

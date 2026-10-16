@@ -1,4 +1,5 @@
 import importlib.util
+import json
 from pathlib import Path
 import shutil
 import tempfile
@@ -34,6 +35,13 @@ class RepositoryChecks(unittest.TestCase):
     def test_missing_target_is_reported(self):
         self.write(self.root / "README.md", "[missing](absent.md)\n")
         self.assertTrue(any("Missing link" in error for error in CHECKER.check_repository(self.root)["errors"]))
+
+    def test_optional_catalog_errors_are_included_in_repository_report(self):
+        self.write(self.root / "catalog.json", json.dumps({
+            "schema_version": 1, "library_id": "example", "skills": []}))
+        report = CHECKER.check_repository(self.root)
+        self.assertTrue(report["catalog_present"])
+        self.assertTrue(any("missing physical skill example" in error for error in report["errors"]))
 
     def test_runtime_cannot_depend_on_authoring_files(self):
         self.write(self.root / "authoring.md", "Authoring only.\n")

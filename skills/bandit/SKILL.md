@@ -13,9 +13,13 @@ Bandit runs security plugins over Python syntax trees. It is useful for risky AP
 
 From the local source root, this example excludes only conventional virtual-environment directories. Confirm that those exclusions fit the actual checkout. Keep tests in scope unless the task gives a reason to exclude them.
 
+When Board supplies `BOARD_EVIDENCE_DIR`, keep reports in a fresh subdirectory there. Standalone use falls back to `TMPDIR` or `/tmp`. Stop if the output directory cannot be created; do not silently redirect evidence elsewhere.
+
 ```bash
 repo=$(pwd -P)
-out=$(mktemp -d "${TMPDIR:-/tmp}/bandit.XXXXXX")
+output_root=${BOARD_EVIDENCE_DIR:-${TMPDIR:-/tmp}}
+mkdir -p -- "$output_root" || exit 1
+out=$(mktemp -d "$output_root/bandit.XXXXXX") || exit 1
 bandit --version >"$out/version.txt" 2>&1
 if bandit -r "$repo" -x "$repo/.venv,$repo/venv" \
   -f json -o "$out/findings.json" \

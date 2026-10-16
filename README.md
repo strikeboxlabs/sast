@@ -1,5 +1,7 @@
 # sast
 
+For selective Board/Pi loading, use the optional [skill catalogue](docs/catalog.md). Packages remain independently installable; category views do not require moving folders.
+
 Independent Agent Skills for finding and reviewing security bugs through a CLI. Start with the tool that fits the source language and question; install only the skill folders the worker needs. Each package contains its own operational guidance and conditional references.
 
 These skills target the Linux image you control. They document tool use; they do not install scanners, provision accounts, or enable hosted analysis. The initial packages are documentation reviewed. See [validation](docs/validation.md) for the checks actually performed and remaining runtime work.
